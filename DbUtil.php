@@ -11,7 +11,7 @@ class DbUtil
     private $password;
     private $mysqli;
 
-    public function __construct($con, $user, $password,$database)
+    public function __construct($con, $user, $password, $database)
     {
         $this->con = $con;
         $this->database = $database;
@@ -22,6 +22,20 @@ class DbUtil
         !$this->mysqli->connect_error or die("链接失败" . $mysqli->connect_error);
 
         $this->mysqli->query("set names utf-8");
+    }
+
+    /**
+     * 执行sql语句
+     */
+    public function execute($sql)
+    {
+        $res = $this->mysqli->query($sql);
+
+        if ($res !== false) {
+            return $this->show(1, '执行成功');
+        }
+
+        return $this->show(0, $this->mysqli->error);
     }
 
     /**
@@ -38,6 +52,10 @@ class DbUtil
 			where table_schema='{$this->database}'";
 
         $res = $this->mysqli->query($sql);
+        if (!$res) {
+            return $this->show(0, '替换失败' . $this->mysqli->error);
+        }
+
         $tableName = [];
 
         foreach ($res as $k => $v) {
@@ -57,14 +75,22 @@ class DbUtil
                 $sql = "UPDATE {$v} SET {$vv['COLUMN_NAME']} = replace({$vv['COLUMN_NAME']}, '{$string}', '{$replace}')";
                 // echo $sql;
                 $res = $this->mysqli->query($sql);
-                if (!$res) {
+                if ($res === false) {
                     // die($this->mysqli->error);
-                    return false;
+                    return $this->show(0, '替换失败' . $this->mysqli->error);
                 }
             }
         }
 
         // echo "替换成功";
-        return true;
+        return $this->show(1, '替换成功' . $this->mysqli->error);
+    }
+
+    /**
+     * 处理返回信息
+     */
+    public function show($status, $message)
+    {
+        return ['status' => $status, 'message' => $message];
     }
 }

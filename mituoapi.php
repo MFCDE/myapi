@@ -13,11 +13,6 @@ $replace = isset($_POST['replace']) ? $_POST['replace'] : '';
 
 $db = new DbUtil($con, $user, $passwrod, $database);
 
-$res = $db->replaceSql($string,$replace);
+$res = $db->replaceSql($string, $replace);
 
-if(!$res == false){
-	echo '替换成功';
-}else{
-	echo '替换失败';
-}
-
+exit(json_encode($res));

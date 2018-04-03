@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>替换高</title>
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/index.css">
+</head>
+
+<body>
+    <div class="container min-container">
+        <div class="alert alert-success text-center title" role="alert">
+            将数据库中所有的
+            <span class="text-danger">'最'</span>替换为
+            <span class="text-info">'高'</span>
+        </div>
+        <form class="form-activation form-horizontal" onsubmit="return false">
+            <div class="form-group">
+                <label for="con" class="col-sm-4 control-label">请输入数据库地址:</label>
+                <div class="col-sm-8">
+                    <input type="input" class="form-control" id="con" name="con">
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="user" class="col-sm-4 control-label">请输入数据库用户名:</label>
+                <div class="col-sm-8">
+                    <input type="input" class="form-control" id="user" name="user">
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="password" class="col-sm-4 control-label">请输入数据库密码:</label>
+                <div class="col-sm-8">
+                    <input type="input" class="form-control" id="password" name="password">
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="database" class="col-sm-4 control-label">请输入数据名:</label>
+                <div class="col-sm-8">
+                    <input type="input" class="form-control" id="database" name="database">
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="string" class="col-sm-4 control-label">请输入要替换的字符串:</label>
+                <div class="col-sm-8">
+                    <input type="input" class="form-control" id="string" name="string" value="最">
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="replace" class="col-sm-4 control-label">请输入替换字符串:</label>
+                <div class="col-sm-8">
+                    <input type="input" class="form-control" id="replace" name="replace" value="高">
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-2 col-sm-offset-4">
+                    <button class="btn btn-lg btn-primary btn-block btn-activation" id="submit" type="submit">替换
+                    </button>
+                </div>
+            </div>
+        </form>
+
+</body>
+<script src="js/jquery-3.3.1.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<script src="js/layer.js"></script>
+<script type="text/javascript">
+    $("#submit").on('click', function () {
+        var data = {
+            con: $("input[name='con']").val(),
+            user: $("input[name='user']").val(),
+            password: $("input[name='password']").val(),
+            database: $("input[name='database']").val(),
+            string: $("input[name='string']").val(),
+            replace: $("input[name='replace']").val(),
+        }
+
+        http('http://php/myapi/mituoapi.php', data, 'post', 'json', callback)
+    });
+
+    function http(url, data, method, dataType, callback) {
+        $.ajax({
+            type: method,
+            url: url,
+            data: data,
+            dataType: dataType,
+            success: function (data) {
+                callback(data);
+            }
+        });
+    }
+
+    function callback(data) {
+        if (data.status == 1) {
+            layer.open({
+                content: data.message,
+                icon: 1
+            });
+        } else {
+            layer.open({
+                content: data.message,
+                icon: 2,
+                title: '错误提示'
+            });
+        }
+    }
+</script>
+
+</html>
