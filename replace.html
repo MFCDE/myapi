@@ -1,70 +1,86 @@
-<!DOCTYPE html>
-<html>
-
+<!doctype html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>替换最</title>
-    <link rel="stylesheet" href="css/bootstrap.min.css">
-    <link rel="stylesheet" href="css/index.css">
+    <link rel="stylesheet" href="mituoapi/css/bootstrap.min.css">
+    <link rel="stylesheet" href="mituoapi/css/index.css">
 </head>
 
 <body>
-    <div class="container min-container">
-        <div class="alert alert-success text-center title" role="alert">
-            将数据库中所有的
-            <span class="text-danger">'最'</span>替换为
-            <span class="text-info">'高'</span>
+<div class="container min-container">
+    <div class="alert alert-success text-center title" role="alert">
+        将数据库中所有的
+        <span class="text-danger">'最'</span>替换为
+        <span class="text-info">'高'</span>
+    </div>
+    <form class="form-activation form-horizontal" onsubmit="return false">
+        <div class="form-group">
+            <label for="con" class="col-sm-4 control-label">请输入数据库地址:</label>
+            <div class="col-sm-8">
+                <input type="input" class="form-control" id="con" name="con">
+            </div>
         </div>
-        <form class="form-activation form-horizontal" onsubmit="return false">
-            <div class="form-group">
-                <label for="con" class="col-sm-4 control-label">请输入数据库地址:</label>
-                <div class="col-sm-8">
-                    <input type="input" class="form-control" id="con" name="con">
-                </div>
+        <div class="form-group">
+            <label for="user" class="col-sm-4 control-label">请输入数据库用户名:</label>
+            <div class="col-sm-8">
+                <input type="input" class="form-control" id="user" name="user">
             </div>
-            <div class="form-group">
-                <label for="user" class="col-sm-4 control-label">请输入数据库用户名:</label>
-                <div class="col-sm-8">
-                    <input type="input" class="form-control" id="user" name="user">
-                </div>
+        </div>
+        <div class="form-group">
+            <label for="password" class="col-sm-4 control-label">请输入数据库密码:</label>
+            <div class="col-sm-8">
+                <input type="input" class="form-control" id="password" name="password">
             </div>
-            <div class="form-group">
-                <label for="password" class="col-sm-4 control-label">请输入数据库密码:</label>
-                <div class="col-sm-8">
-                    <input type="input" class="form-control" id="password" name="password">
-                </div>
+        </div>
+        <div class="form-group">
+            <label for="database" class="col-sm-4 control-label">请输入数据名:</label>
+            <div class="col-sm-8">
+                <input type="input" class="form-control" id="database" name="database">
             </div>
-            <div class="form-group">
-                <label for="database" class="col-sm-4 control-label">请输入数据名:</label>
-                <div class="col-sm-8">
-                    <input type="input" class="form-control" id="database" name="database">
-                </div>
+        </div>
+        <div class="form-group">
+            <label for="string" class="col-sm-4 control-label">请输入要替换的字符串:</label>
+            <div class="col-sm-8">
+                <input type="input" class="form-control" id="string" name="string" value="最">
             </div>
-            <div class="form-group">
-                <label for="string" class="col-sm-4 control-label">请输入要替换的字符串:</label>
-                <div class="col-sm-8">
-                    <input type="input" class="form-control" id="string" name="string" value="最">
-                </div>
+        </div>
+        <div class="form-group">
+            <label for="replace" class="col-sm-4 control-label">请输入替换字符串:</label>
+            <div class="col-sm-8">
+                <input type="input" class="form-control" id="replace" name="replace" value="高">
             </div>
-            <div class="form-group">
-                <label for="replace" class="col-sm-4 control-label">请输入替换字符串:</label>
-                <div class="col-sm-8">
-                    <input type="input" class="form-control" id="replace" name="replace" value="高">
-                </div>
+        </div>
+        <div class="form-group">
+            <label for="search" class="col-sm-4 control-label">请输入查询关键字:</label>
+            <div class="col-sm-8">
+                <input type="input" class="form-control" id="search" name="search">
             </div>
-            <div class="form-group">
-                <div class="col-sm-2 col-sm-offset-4">
-                    <button class="btn btn-lg btn-primary btn-block btn-activation" id="submit" type="submit">替换
-                    </button>
-                </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-2 col-sm-offset-4">
+                <button class="btn btn-lg btn-primary btn-block btn-activation" data-id="1" id="subsearch"
+                        type="submit">查询
+                </button>
             </div>
-        </form>
+            <div class="col-sm-2 col-sm-offset-1">
+                <button class="btn btn-lg btn-primary btn-block btn-activation" data-id="2" id="subreplace"
+                        type="submit">替换
+                </button>
+            </div>
+        </div>
+    </form>
 
 </body>
-<script src="js/jquery-3.3.1.min.js"></script>
-<script src="js/bootstrap.min.js"></script>
-<script src="js/layer.js"></script>
+<script src="mituoapi/js/jquery-3.3.1.min.js"></script>
+<script src="mituoapi/js/bootstrap.min.js"></script>
+<script src="mituoapi/js/layer.js"></script>
 <script type="text/javascript">
-    $("#submit").on('click', function () {
+    $("#subsearch").on('click', function () {
+        var id = $(this).attr('data-id');
         var data = {
             con: $("input[name='con']").val(),
             user: $("input[name='user']").val(),
@@ -72,9 +88,35 @@
             database: $("input[name='database']").val(),
             string: $("input[name='string']").val(),
             replace: $("input[name='replace']").val(),
+            search: $("input[name='search']").val(),
+            id: id
         }
 
-        http('http://php/myapi/mituoapi.php', data, 'post', 'json', callback)
+        // http://php/myapi/mituoapi.php
+
+        var url = "http://php/myapi/mituoapi/mituoapi.php";
+        http(url, data, 'post', 'json', callback)
+    });
+
+    $("#subreplace").on('click', function () {
+        var id = $(this).attr('data-id');
+        var replace = $("input[name='replace']").val();
+        $("input[name='search']").val(replace);
+
+        var data = {
+            con: $("input[name='con']").val(),
+            user: $("input[name='user']").val(),
+            password: $("input[name='password']").val(),
+            database: $("input[name='database']").val(),
+            string: $("input[name='string']").val(),
+            replace: $("input[name='replace']").val(),
+            search: $("input[name='search']").val(),
+            id: id
+        }
+        // http://php/myapi/mituoapi.php
+
+        var url = "http://php/myapi/mituoapi/mituoapi.php";
+        http(url, data, 'post', 'json', callback)
     });
 
     function http(url, data, method, dataType, callback) {
@@ -84,7 +126,18 @@
             data: data,
             dataType: dataType,
             success: function (data) {
+                //删除上一次查询节点
+                $("form").children(".temp").remove();
                 callback(data);
+                console.log(data);
+                if (data.data) {
+                    var res = data.data;
+                    for (var i in res) {
+                        var option = $("<div class='form-group temp'> <label class='col-sm-4 control-label'>查询结果:</label>" +
+                            " <div class='col-sm-8'><textarea class='form-control search' ></textarea></div></div>").appendTo("form");
+                        $('.search').eq(i).val(res[i]);
+                    }
+                }
             }
         });
     }
