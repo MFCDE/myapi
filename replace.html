@@ -81,28 +81,20 @@
 <script type="text/javascript">
     $("#subsearch").on('click', function () {
         var id = $(this).attr('data-id');
-        var data = {
-            con: $("input[name='con']").val(),
-            user: $("input[name='user']").val(),
-            password: $("input[name='password']").val(),
-            database: $("input[name='database']").val(),
-            string: $("input[name='string']").val(),
-            replace: $("input[name='replace']").val(),
-            search: $("input[name='search']").val(),
-            id: id
-        }
 
-        // http://php/myapi/mituoapi.php
-
-        var url = "http://php/myapi/mituoapi/mituoapi.php";
-        http(url, data, 'post', 'json', callback)
+        ajax_method(id,$("input[name='search']").val());
     });
 
     $("#subreplace").on('click', function () {
         var id = $(this).attr('data-id');
-        var replace = $("input[name='replace']").val();
-        $("input[name='search']").val(replace);
 
+        ajax_method(id)
+    });
+
+    /**
+     * 获取数据发送请求方法
+     */
+    function ajax_method(id,search = ''){
         var data = {
             con: $("input[name='con']").val(),
             user: $("input[name='user']").val(),
@@ -110,14 +102,15 @@
             database: $("input[name='database']").val(),
             string: $("input[name='string']").val(),
             replace: $("input[name='replace']").val(),
-            search: $("input[name='search']").val(),
+            search: search,
             id: id
         }
+
         // http://php/myapi/mituoapi.php
 
-        var url = "http://php/myapi/mituoapi/mituoapi.php";
+        var url = "http://php/api/myapi/mituoapi/mituoapi.php";
         http(url, data, 'post', 'json', callback)
-    });
+    }
 
     function http(url, data, method, dataType, callback) {
         $.ajax({
@@ -130,20 +123,23 @@
                 $("form").children(".temp").remove();
                 callback(data);
                 console.log(data);
-                if (data.data) {
+                if (data.status == 1) {
                     var res = data.data;
                     for (var i in res) {
                         var option = $("<div class='form-group temp'> <label class='col-sm-4 control-label'>查询结果:</label>" +
                             " <div class='col-sm-8'><textarea class='form-control search' ></textarea></div></div>").appendTo("form");
                         $('.search').eq(i).val(res[i]);
                     }
+                }else if(data.status == 2){
+                    //替换完成进行一次新的查询
+                    ajax_method(1, $("input[name='replace']").val());
                 }
             }
         });
     }
 
     function callback(data) {
-        if (data.status == 1) {
+        if (data.status) {
             layer.open({
                 content: data.message,
                 icon: 1
